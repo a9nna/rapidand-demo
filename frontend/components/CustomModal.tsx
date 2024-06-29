@@ -1,16 +1,15 @@
-import { useState } from "react";
-import { Button, Modal, StyleSheet, Text, View } from "react-native";
+import { Button, Modal, StyleSheet, Text, View } from 'react-native'
 
 interface CustomModalProps {
-  data: string[];
-  isVisible: boolean;
-  onClose?: () => void;
+  data: string[]
+  isVisible: boolean
+  onClose?: () => void
 }
 
 const CustomModal = ({ data, isVisible, onClose }: CustomModalProps) => {
   const closeModal = () => {
-    onClose?.();
-  };
+    onClose?.()
+  }
 
   return (
     <Modal
@@ -24,7 +23,7 @@ const CustomModal = ({ data, isVisible, onClose }: CustomModalProps) => {
           <Text
             style={{
               fontSize: 18,
-              fontWeight: "bold",
+              fontWeight: 'bold',
               marginBottom: 10,
             }}
           >
@@ -37,24 +36,24 @@ const CustomModal = ({ data, isVisible, onClose }: CustomModalProps) => {
         </View>
       </View>
     </Modal>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   modalBackground: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalContainer: {
-    width: "80%",
-    backgroundColor: "white",
+    width: '80%',
+    backgroundColor: 'white',
     padding: 20,
     borderRadius: 10,
-    alignItems: "center",
+    alignItems: 'center',
     gap: 20,
   },
-});
+})
 
-export default CustomModal;
+export default CustomModal

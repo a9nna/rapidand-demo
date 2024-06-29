@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Modal, StyleSheet, Button } from "react-native";
-import { useForm, Controller } from "react-hook-form";
-import { Picker } from "@react-native-picker/picker";
-import { ClientForm } from "@/types";
-import { yupResolver } from "@hookform/resolvers/yup";
-import clientValidationSchema from "@/utils/clientValidationSchema";
-import CustomInput from "@/components/CustomInput";
-import CustomDatePicker from "@/components/CustomDatePicker";
-import CustomModal from "@/components/CustomModal";
-import formattedFormData from "@/utils/formattedFormData";
+import { useState } from 'react'
+import { View, Text, TextInput, StyleSheet, Button } from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+import { Picker } from '@react-native-picker/picker'
+import { ClientForm } from '@/utils/types'
+import { yupResolver } from '@hookform/resolvers/yup'
+import clientValidationSchema from '@/utils/clientValidationSchema'
+import CustomInput from '@/components/CustomInput'
+import CustomDatePicker from '@/components/CustomDatePicker'
+import CustomModal from '@/components/CustomModal'
+import formattedFormData from '@/utils/formattedFormData'
+import useClient from '@/hooks/useClient'
 
 const App = () => {
   const {
@@ -19,50 +20,53 @@ const App = () => {
   } = useForm({
     resolver: yupResolver(clientValidationSchema),
     defaultValues: {
-      name: "",
-      lastName: "",
+      name: '',
+      lastName: '',
       dateOfBirth: new Date(),
-      email: "",
-      phone: "",
-      address: "",
-      creditCardNumber: "",
-      expirationDate: "",
-      cvv: "",
-      parish: "",
-      town: "",
+      email: '',
+      phone: '',
+      address: '',
+      creditCardNumber: '',
+      expirationDate: '',
+      cvv: '',
+      parish: '',
+      town: '',
     },
-  });
+  })
 
-  const [expirationDate, setExpirationDate] = useState("");
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [modalData, setModalData] = useState<string[]>([]);
+  const { createClient } = useClient()
+  const [expirationDate, setExpirationDate] = useState('')
+  const [isModalVisible, setModalVisible] = useState(false)
+  const [modalData, setModalData] = useState<string[]>([])
   const [towns, setTowns] = useState<string[]>([
-    "Kingston",
-    "Spanish Town",
-    "Portmore",
-    "Montego Bay",
-    "Mandeville",
-    "May Pen",
-  ]);
+    'Kingston',
+    'Spanish Town',
+    'Portmore',
+    'Montego Bay',
+    'Mandeville',
+    'May Pen',
+  ])
 
   const formatExpirationDate = (value: string) => {
-    const cleaned = value.replace(/\D/g, "");
+    const cleaned = value.replace(/\D/g, '')
     if (cleaned.length >= 3) {
-      return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}`;
+      return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}`
     }
-    return cleaned;
-  };
+    return cleaned
+  }
 
   const closeModal = () => {
-    setModalVisible(false);
-  };
+    setModalVisible(false)
+  }
 
-  const onSubmit = (data: ClientForm) => {
-    const formattedData = formattedFormData(data);
+  const onSubmit = async (data: ClientForm) => {
+    const formattedData = formattedFormData(data)
 
-    setModalData(formattedData);
-    setModalVisible(true);
-  };
+    setModalData(formattedData)
+    setModalVisible(true)
+    console.log(data)
+    await createClient(data)
+  }
 
   return (
     <View>
@@ -96,7 +100,7 @@ const App = () => {
               )}
             />
             {errors.dateOfBirth && (
-              <Text style={{ color: "red" }}>{errors.dateOfBirth.message}</Text>
+              <Text style={{ color: 'red' }}>{errors.dateOfBirth.message}</Text>
             )}
             <Controller
               control={control}
@@ -108,7 +112,7 @@ const App = () => {
                     selectedValue={value}
                     onValueChange={onChange}
                     style={styles.input}
-                    itemStyle={{ height: 45, backgroundColor: "red" }}
+                    itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
                     {towns.map((town) => (
@@ -119,7 +123,7 @@ const App = () => {
               )}
             />
             {errors.parish && (
-              <Text style={{ color: "red" }}>{errors.parish.message}</Text>
+              <Text style={{ color: 'red' }}>{errors.parish.message}</Text>
             )}
             <CustomInput
               control={control}
@@ -161,7 +165,7 @@ const App = () => {
                     selectedValue={value}
                     onValueChange={onChange}
                     style={styles.input}
-                    itemStyle={{ height: 45, backgroundColor: "red" }}
+                    itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
                     {towns.map((town) => (
@@ -172,7 +176,7 @@ const App = () => {
               )}
             />
             {errors.parish && (
-              <Text style={{ color: "red" }}>{errors.parish.message}</Text>
+              <Text style={{ color: 'red' }}>{errors.parish.message}</Text>
             )}
             <CustomInput
               control={control}
@@ -190,9 +194,9 @@ const App = () => {
                   <TextInput
                     onBlur={onBlur}
                     onChangeText={(text) => {
-                      const formatted = formatExpirationDate(text);
-                      setExpirationDate(formatted);
-                      onChange(formatted);
+                      const formatted = formatExpirationDate(text)
+                      setExpirationDate(formatted)
+                      onChange(formatted)
                     }}
                     value={value || expirationDate}
                     style={styles.input}
@@ -202,7 +206,7 @@ const App = () => {
               )}
             />
             {errors.expirationDate && (
-              <Text style={{ color: "red" }}>
+              <Text style={{ color: 'red' }}>
                 {errors.expirationDate.message}
               </Text>
             )}
@@ -217,50 +221,50 @@ const App = () => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     margin: 20,
     padding: 20,
     borderRadius: 10,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   form: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     gap: 20,
   },
   column: {
     flex: 1,
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
     height: 45,
   },
   label: {
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 5,
   },
   button: {
-    backgroundColor: "green",
-    color: "white",
+    backgroundColor: 'green',
+    color: 'white',
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
-    width: "20%",
+    width: '20%',
   },
-});
+})
 
-export default App;
+export default App

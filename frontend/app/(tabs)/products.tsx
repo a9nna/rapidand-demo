@@ -1,14 +1,14 @@
-import React, { useState } from "react";
-import { View, Text, Modal, StyleSheet, Button, Image } from "react-native";
-import { useForm, Controller } from "react-hook-form";
-import { Picker } from "@react-native-picker/picker";
-import * as ImagePicker from "expo-image-picker";
-import { yupResolver } from "@hookform/resolvers/yup";
-import productValidationSchema from "@/utils/productValidationSchema";
-import CustomInput from "@/components/CustomInput";
-import { ProductForm } from "@/types";
-import CustomModal from "@/components/CustomModal";
-import formattedFormData from "@/utils/formattedFormData";
+import { useState } from 'react'
+import { View, Text, Button, Image, StyleSheet } from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+import { Picker } from '@react-native-picker/picker'
+import * as ImagePicker from 'expo-image-picker'
+import { yupResolver } from '@hookform/resolvers/yup'
+import productValidationSchema from '@/utils/productValidationSchema'
+import CustomInput from '@/components/CustomInput'
+import { ProductForm } from '@/utils/types'
+import CustomModal from '@/components/CustomModal'
+import formattedFormData from '@/utils/formattedFormData'
 
 const App = () => {
   const {
@@ -20,30 +20,30 @@ const App = () => {
   } = useForm({
     resolver: yupResolver(productValidationSchema),
     defaultValues: {
-      name: "",
-      type: "",
-      image: "",
+      name: '',
+      type: '',
+      image: '',
     },
-  });
+  })
 
-  const [isModalVisible, setModalVisible] = useState(false);
-  const [selectedImage, setSelectedImage] = useState<string | null>(null);
-  const [modalData, setModalData] = useState<string[]>([]);
+  const [isModalVisible, setModalVisible] = useState(false)
+  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [modalData, setModalData] = useState<string[]>([])
   const [towns, setTowns] = useState<string[]>([
-    "Kingston",
-    "Spanish Town",
-    "Portmore",
-    "Montego Bay",
-    "Mandeville",
-    "May Pen",
-  ]);
+    'Kingston',
+    'Spanish Town',
+    'Portmore',
+    'Montego Bay',
+    'Mandeville',
+    'May Pen',
+  ])
 
   const handleImageUpload = async () => {
     const permissionResult =
-      await ImagePicker.requestMediaLibraryPermissionsAsync();
+      await ImagePicker.requestMediaLibraryPermissionsAsync()
     if (permissionResult.granted === false) {
-      console.log("Permission to access camera roll is required!");
-      return;
+      console.log('Permission to access camera roll is required!')
+      return
     }
 
     const pickerResult = await ImagePicker.launchImageLibraryAsync({
@@ -51,29 +51,29 @@ const App = () => {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    });
+    })
 
     if (!pickerResult.canceled) {
-      setSelectedImage(pickerResult.assets[0].uri);
-      setValue("image", pickerResult.assets[0].uri);
+      setSelectedImage(pickerResult.assets[0].uri)
+      setValue('image', pickerResult.assets[0].uri)
     }
-  };
+  }
 
   const handleImageDelete = () => {
-    setSelectedImage(null);
-    setValue("image", "");
-  };
+    setSelectedImage(null)
+    setValue('image', '')
+  }
 
   const onSubmit = (data: ProductForm) => {
-    const formattedData = formattedFormData(data);
+    const formattedData = formattedFormData(data)
 
-    setModalData(formattedData);
-    setModalVisible(true);
-  };
+    setModalData(formattedData)
+    setModalVisible(true)
+  }
 
   const closeModal = () => {
-    setModalVisible(false);
-  };
+    setModalVisible(false)
+  }
 
   return (
     <View>
@@ -116,7 +116,7 @@ const App = () => {
               </View>
             )}
             {errors.image && (
-              <Text style={{ color: "red" }}>{errors.image.message}</Text>
+              <Text style={{ color: 'red' }}>{errors.image.message}</Text>
             )}
           </View>
           <View style={styles.column}>
@@ -130,7 +130,7 @@ const App = () => {
                     selectedValue={value}
                     onValueChange={onChange}
                     style={styles.input}
-                    itemStyle={{ height: 45, backgroundColor: "red" }}
+                    itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
                     {towns.map((town) => (
@@ -141,7 +141,7 @@ const App = () => {
               )}
             />
             {errors.type && (
-              <Text style={{ color: "red" }}>{errors.type.message}</Text>
+              <Text style={{ color: 'red' }}>{errors.type.message}</Text>
             )}
           </View>
         </View>
@@ -154,67 +154,67 @@ const App = () => {
         </View>
       </View>
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   container: {
     margin: 20,
     padding: 20,
     borderRadius: 10,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
   },
   form: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     gap: 20,
   },
   column: {
     flex: 1,
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
     height: 45,
   },
   label: {
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 5,
   },
   button: {
-    backgroundColor: "green",
-    color: "white",
+    backgroundColor: 'green',
+    color: 'white',
     padding: 10,
     borderRadius: 5,
     marginTop: 20,
-    width: "20%",
+    width: '20%',
   },
   previewImage: {
     width: 200,
     height: 200,
     marginBottom: 10,
-    resizeMode: "cover",
+    resizeMode: 'cover',
     borderRadius: 10,
   },
   selectImageButton: {
-    backgroundColor: "#2c6ed7",
+    backgroundColor: '#2c6ed7',
     borderRadius: 10,
     height: 45,
-    justifyContent: "center",
+    justifyContent: 'center',
   },
   previewImageContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     gap: 10,
   },
-});
+})
 
-export default App;
+export default App

@@ -1,21 +1,21 @@
-import { Control, Controller, FieldErrors } from "react-hook-form";
-import { StyleSheet, View, TextInput, Text } from "react-native";
+import { Control, Controller } from 'react-hook-form'
+import { StyleSheet, View, TextInput, Text } from 'react-native'
 
 interface FormInputProps {
-  name: string;
-  control: Control;
-  label?: string;
-  secureTextEntry?: boolean;
-  keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
-  isError: boolean;
-  errorMessage: string;
+  name: string
+  control: Control
+  label?: string
+  secureTextEntry?: boolean
+  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad'
+  isError: boolean
+  errorMessage: string
 }
 
 const CustomInput: React.FC<FormInputProps> = ({
   name,
   control,
   label,
-  keyboardType = "default",
+  keyboardType = 'default',
   isError,
   errorMessage,
 }) => {
@@ -35,26 +35,26 @@ const CustomInput: React.FC<FormInputProps> = ({
         )}
         name={name}
       />
-      {isError && <Text style={{ color: "red" }}>{errorMessage}</Text>}
+      {isError && <Text style={{ color: 'red' }}>{errorMessage}</Text>}
     </View>
-  );
-};
+  )
+}
 
 const styles = StyleSheet.create({
   input: {
     borderWidth: 1,
-    borderColor: "#ccc",
+    borderColor: '#ccc',
     borderRadius: 5,
     padding: 10,
     marginBottom: 10,
     height: 45,
   },
   label: {
-    textTransform: "uppercase",
+    textTransform: 'uppercase',
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: '700',
     marginBottom: 5,
-    color: "#333",
+    color: '#333',
   },
-});
-export default CustomInput;
+})
+export default CustomInput
