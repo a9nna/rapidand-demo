@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: rapidandDatabase
+      POSTGRES_USER: myRapidandUser
+      POSTGRES_PASSWORD: myRapidandUser
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5000:5432"
+
+volumes:
+  db_data:
