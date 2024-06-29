@@ -1,5 +1,4 @@
-import { ClientForm } from "@/types";
-import { Control, Controller } from "react-hook-form";
+import { Control, Controller, FieldErrors } from "react-hook-form";
 import { StyleSheet, View, TextInput, Text } from "react-native";
 
 interface FormInputProps {
@@ -8,6 +7,8 @@ interface FormInputProps {
   label?: string;
   secureTextEntry?: boolean;
   keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
+  isError: boolean;
+  errorMessage: string;
 }
 
 const CustomInput: React.FC<FormInputProps> = ({
@@ -15,6 +16,8 @@ const CustomInput: React.FC<FormInputProps> = ({
   control,
   label,
   keyboardType = "default",
+  isError,
+  errorMessage,
 }) => {
   return (
     <View>
@@ -32,6 +35,7 @@ const CustomInput: React.FC<FormInputProps> = ({
         )}
         name={name}
       />
+      {isError && <Text style={{ color: "red" }}>{errorMessage}</Text>}
     </View>
   );
 };

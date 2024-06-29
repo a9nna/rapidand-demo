@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import clientValidationSchema from "@/utils/clientValidationSchema";
 import CustomInput from "@/components/CustomInput";
 import CustomDatePicker from "@/components/CustomDatePicker";
+import CustomModal from "@/components/CustomModal";
+import formattedFormData from "@/utils/formattedFormData";
 
 const App = () => {
   const {
@@ -33,6 +35,7 @@ const App = () => {
 
   const [expirationDate, setExpirationDate] = useState("");
   const [isModalVisible, setModalVisible] = useState(false);
+  const [modalData, setModalData] = useState<string[]>([]);
   const [towns, setTowns] = useState<string[]>([
     "Kingston",
     "Spanish Town",
@@ -55,54 +58,36 @@ const App = () => {
   };
 
   const onSubmit = (data: ClientForm) => {
+    const formattedData = formattedFormData(data);
+
+    setModalData(formattedData);
     setModalVisible(true);
   };
 
   return (
     <View>
-      <Modal
-        visible={isModalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "bold",
-                marginBottom: 10,
-              }}
-            >
-              Form Data
-            </Text>
-            <Text>Name: {getValues().name}</Text>
-            <Text>Last Name: {getValues().lastName}</Text>
-            <Text>
-              Date of Birth: {getValues().dateOfBirth.toLocaleDateString()}
-            </Text>
-            <Text>Email: {getValues().email}</Text>
-            <Text>Phone: {getValues().phone}</Text>
-            <Text>Address: {getValues().address}</Text>
-            <Text>Credit Card: {getValues().creditCardNumber}</Text>
-            <Text>Expiration Date: {getValues().expirationDate}</Text>
-            <Text>CVV: {getValues().cvv}</Text>
-            <Button title="Close" onPress={closeModal} />
-          </View>
-        </View>
-      </Modal>
+      <CustomModal
+        data={modalData}
+        isVisible={isModalVisible}
+        onClose={closeModal}
+      />
       <View style={styles.container}>
         <View style={styles.form}>
           <View style={styles.column}>
-            <CustomInput control={control} name="name" label="first name" />
-            {errors.name && (
-              <Text style={{ color: "red" }}>{errors.name.message}</Text>
-            )}
-            <CustomInput control={control} name="lastName" label="last name" />
-            {errors.lastName && (
-              <Text style={{ color: "red" }}>{errors.lastName.message}</Text>
-            )}
+            <CustomInput
+              control={control}
+              name="name"
+              label="first name"
+              isError={!!errors.name}
+              errorMessage={errors.name?.message!}
+            />
+            <CustomInput
+              control={control}
+              name="lastName"
+              label="last name"
+              isError={!!errors.lastName}
+              errorMessage={errors.lastName?.message!}
+            />
             <Controller
               control={control}
               name="dateOfBirth"
@@ -140,26 +125,32 @@ const App = () => {
               control={control}
               name="creditCardNumber"
               label="credit card number"
+              isError={!!errors.creditCardNumber}
+              errorMessage={errors.creditCardNumber?.message!}
             />
-            {errors.creditCardNumber && (
-              <Text style={{ color: "red" }}>
-                {errors.creditCardNumber.message}
-              </Text>
-            )}
           </View>
           <View style={styles.column}>
-            <CustomInput control={control} name="email" label="email" />
-            {errors.email && (
-              <Text style={{ color: "red" }}>{errors.email.message}</Text>
-            )}
-            <CustomInput control={control} name="phone" label="phone" />
-            {errors.phone && (
-              <Text style={{ color: "red" }}>{errors.phone.message}</Text>
-            )}
-            <CustomInput control={control} name="address" label="address" />
-            {errors.address && (
-              <Text style={{ color: "red" }}>{errors.address.message}</Text>
-            )}
+            <CustomInput
+              control={control}
+              name="email"
+              label="email"
+              isError={!!errors.email}
+              errorMessage={errors.email?.message!}
+            />
+            <CustomInput
+              control={control}
+              name="phone"
+              label="phone"
+              isError={!!errors.phone}
+              errorMessage={errors.phone?.message!}
+            />
+            <CustomInput
+              control={control}
+              name="address"
+              label="address"
+              isError={!!errors.address}
+              errorMessage={errors.address?.message!}
+            />
             <Controller
               control={control}
               name="town"
@@ -183,10 +174,13 @@ const App = () => {
             {errors.parish && (
               <Text style={{ color: "red" }}>{errors.parish.message}</Text>
             )}
-            <CustomInput control={control} name="cvv" label="cvv" />
-            {errors.cvv && (
-              <Text style={{ color: "red" }}>{errors.cvv.message}</Text>
-            )}
+            <CustomInput
+              control={control}
+              name="cvv"
+              label="cvv"
+              isError={!!errors.cvv}
+              errorMessage={errors.cvv?.message!}
+            />
             <Controller
               control={control}
               name="expirationDate"
@@ -266,20 +260,6 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginTop: 20,
     width: "20%",
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContainer: {
-    width: "80%",
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
-    gap: 20,
   },
 });
 

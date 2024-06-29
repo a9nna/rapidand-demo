@@ -7,6 +7,8 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import productValidationSchema from "@/utils/productValidationSchema";
 import CustomInput from "@/components/CustomInput";
 import { ProductForm } from "@/types";
+import CustomModal from "@/components/CustomModal";
+import formattedFormData from "@/utils/formattedFormData";
 
 const App = () => {
   const {
@@ -26,6 +28,7 @@ const App = () => {
 
   const [isModalVisible, setModalVisible] = useState(false);
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
+  const [modalData, setModalData] = useState<string[]>([]);
   const [towns, setTowns] = useState<string[]>([
     "Kingston",
     "Spanish Town",
@@ -62,6 +65,9 @@ const App = () => {
   };
 
   const onSubmit = (data: ProductForm) => {
+    const formattedData = formattedFormData(data);
+
+    setModalData(formattedData);
     setModalVisible(true);
   };
 
@@ -71,36 +77,21 @@ const App = () => {
 
   return (
     <View>
-      <Modal
-        visible={isModalVisible}
-        transparent={true}
-        animationType="fade"
-        onRequestClose={closeModal}
-      >
-        <View style={styles.modalBackground}>
-          <View style={styles.modalContainer}>
-            <Text
-              style={{
-                fontSize: 18,
-                fontWeight: "bold",
-                marginBottom: 10,
-              }}
-            >
-              Form Data
-            </Text>
-            <Text>Name of product: {getValues().name}</Text>
-            <Text>Type of product: {getValues().type}</Text>
-            <Button title="Close" onPress={closeModal} />
-          </View>
-        </View>
-      </Modal>
+      <CustomModal
+        data={modalData}
+        isVisible={isModalVisible}
+        onClose={closeModal}
+      />
       <View style={styles.container}>
         <View style={styles.form}>
           <View style={styles.column}>
-            <CustomInput control={control} name="name" label="product name" />
-            {errors.name && (
-              <Text style={{ color: "red" }}>{errors.name.message}</Text>
-            )}
+            <CustomInput
+              control={control}
+              name="name"
+              label="product name"
+              isError={!!errors.name}
+              errorMessage={errors.name?.message!}
+            />
             {selectedImage ? (
               <View style={styles.previewImageContainer}>
                 <Image
@@ -219,20 +210,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     height: 45,
     justifyContent: "center",
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  modalContainer: {
-    width: "80%",
-    backgroundColor: "white",
-    padding: 20,
-    borderRadius: 10,
-    alignItems: "center",
-    gap: 20,
   },
   previewImageContainer: {
     flexDirection: "row",
