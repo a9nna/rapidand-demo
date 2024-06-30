@@ -1,18 +1,18 @@
 import { useState } from 'react'
 import { View, Text, Button, Image } from 'react-native'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, SubmitHandler } from 'react-hook-form'
 import { Picker } from '@react-native-picker/picker'
 import * as ImagePicker from 'expo-image-picker'
 import { yupResolver } from '@hookform/resolvers/yup'
-import productValidationSchema from '@/utils/productValidationSchema'
+import productValidationSchema from '@/utils/schemas/productValidationSchema'
 import CustomInput from '@/components/CustomInput'
 import { ProductForm } from '@/constants/types'
-import CustomModal from '@/components/CustomModal'
+import CustomModal from '@/components/CustomModal/CustomModal'
 import formattedFormData from '@/utils/formattedFormData'
 import useProductApi from '@/hooks/useProductApi'
-import { styles } from '@/constants/styles'
+import { globalStyles } from '@/constants/globalStyles'
 
-const App = () => {
+const NewProduct = () => {
   const {
     control,
     handleSubmit,
@@ -23,13 +23,13 @@ const App = () => {
     defaultValues: {
       name: '',
       type: '',
-      image: '',
+      image: undefined,
     },
   })
 
   const { createProduct } = useProductApi()
   const [isModalVisible, setModalVisible] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<string | null>(null)
+  const [selectedImage, setSelectedImage] = useState<File | null>(null)
   const [modalData, setModalData] = useState<string[]>([])
   const [towns, setTowns] = useState<string[]>([
     'Kingston',
@@ -57,7 +57,7 @@ const App = () => {
     })
 
     if (!pickerResult.canceled) {
-      const image: string = pickerResult.assets[0].uri
+      const image = pickerResult as unknown as File
       setSelectedImage(image)
       setValue('image', image)
     }
@@ -68,7 +68,7 @@ const App = () => {
     setValue('image', '')
   }
 
-  const onSubmit = async (data: ProductForm) => {
+  const onSubmit: SubmitHandler<ProductForm> = async (data) => {
     const formData = new FormData()
     formData.append('name', data.name)
     formData.append('type', data.type)
@@ -79,7 +79,7 @@ const App = () => {
       }
     }
 
-    await createProduct(formData).then((response) => {
+    await createProduct(formData).then(() => {
       const formattedData = formattedFormData(data)
 
       setModalData(formattedData)
@@ -98,10 +98,10 @@ const App = () => {
         isVisible={isModalVisible}
         onClose={closeModal}
       />
-      <View style={styles.formContainer}>
-        <View style={styles.form}>
-          <View style={styles.column}>
-            <CustomInput
+      <View style={globalStyles.formContainer}>
+        <View style={globalStyles.form}>
+          <View style={globalStyles.column}>
+            <CustomInput<T extends FieldValues>
               control={control}
               name="name"
               label="product name"
@@ -109,13 +109,13 @@ const App = () => {
               errorMessage={errors.name?.message!}
             />
             {selectedImage ? (
-              <View style={styles.previewImageContainer}>
+              <View style={globalStyles.previewImageContainer}>
                 <Image
                   source={{ uri: selectedImage }}
-                  style={styles.previewImage}
+                  style={globalStyles.previewImage}
                   resizeMode="cover"
                 />
-                <View style={styles.selectImageButton}>
+                <View style={globalStyles.selectImageButton}>
                   <Button
                     title="Delete Image"
                     onPress={handleImageDelete}
@@ -124,7 +124,7 @@ const App = () => {
                 </View>
               </View>
             ) : (
-              <View style={styles.selectImageButton}>
+              <View style={globalStyles.selectImageButton}>
                 <Button
                   title="Pick Image"
                   onPress={handleImageUpload}
@@ -136,17 +136,19 @@ const App = () => {
               <Text style={{ color: 'red' }}>{errors.image.message}</Text>
             )}
           </View>
-          <View style={styles.column}>
+          <View style={globalStyles.column}>
             <Controller
               control={control}
               name="type"
               render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                  <Text style={styles.label}>select a type of product:</Text>
+                  <Text style={globalStyles.label}>
+                    select a type of product:
+                  </Text>
                   <Picker
                     selectedValue={value}
                     onValueChange={onChange}
-                    style={styles.input}
+                    style={globalStyles.input}
                     itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
@@ -162,7 +164,7 @@ const App = () => {
             )}
           </View>
         </View>
-        <View style={styles.button}>
+        <View style={globalStyles.button}>
           <Button
             title="Save"
             onPress={handleSubmit(onSubmit)}
@@ -174,4 +176,4 @@ const App = () => {
   )
 }
 
-export default App
+export default NewProduct

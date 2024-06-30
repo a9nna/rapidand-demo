@@ -1,6 +1,6 @@
 import { Platform, StyleSheet } from 'react-native'
 
-export const styles = StyleSheet.create({
+export const globalStyles = StyleSheet.create({
   formContainer: {
     margin: 20,
     padding: 20,
@@ -80,41 +80,5 @@ export const styles = StyleSheet.create({
   previewImageContainer: {
     flexDirection: 'row',
     gap: 10,
-  },
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContainer: {
-    width: '80%',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    gap: 20,
-  },
-  card: {
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#ccc',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.9,
-        shadowRadius: 10,
-      },
-      android: {
-        elevation: 4,
-      },
-      default: {
-        shadowColor: '#ccc',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 0.9,
-        shadowRadius: 10,
-      },
-    }),
   },
 })

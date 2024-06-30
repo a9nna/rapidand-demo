@@ -6,11 +6,11 @@ import { ClientForm } from '@/constants/types'
 import { yupResolver } from '@hookform/resolvers/yup'
 import clientValidationSchema from '@/utils/clientValidationSchema'
 import CustomInput from '@/components/CustomInput'
-import CustomDatePicker from '@/components/CustomDatePicker'
-import CustomModal from '@/components/CustomModal'
+import CustomDatePicker from '@/components/CustomDatePicket/CustomDatePicker'
+import CustomModal from '@/components/CustomModal/CustomModal'
 import formattedFormData from '@/utils/formattedFormData'
 import useClientApi from '@/hooks/useClientApi'
-import { styles } from '@/constants/styles'
+import { globalStyles } from '@/constants/globalStyles'
 
 const App = () => {
   const {
@@ -76,9 +76,9 @@ const App = () => {
         isVisible={isModalVisible}
         onClose={closeModal}
       />
-      <View style={styles.formContainer}>
-        <View style={styles.form}>
-          <View style={styles.column}>
+      <View style={globalStyles.formContainer}>
+        <View style={globalStyles.form}>
+          <View style={globalStyles.column}>
             <CustomInput
               control={control}
               name="name"
@@ -108,11 +108,11 @@ const App = () => {
               name="parish"
               render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                  <Text style={styles.label}>select a parish:</Text>
+                  <Text style={globalStyles.label}>select a parish:</Text>
                   <Picker
                     selectedValue={value}
                     onValueChange={onChange}
-                    style={styles.input}
+                    style={globalStyles.input}
                     itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
@@ -134,7 +134,7 @@ const App = () => {
               errorMessage={errors.creditCardNumber?.message!}
             />
           </View>
-          <View style={styles.column}>
+          <View style={globalStyles.column}>
             <CustomInput
               control={control}
               name="email"
@@ -161,11 +161,11 @@ const App = () => {
               name="town"
               render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                  <Text style={styles.label}>select a town:</Text>
+                  <Text style={globalStyles.label}>select a town:</Text>
                   <Picker
                     selectedValue={value}
                     onValueChange={onChange}
-                    style={styles.input}
+                    style={globalStyles.input}
                     itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
@@ -191,7 +191,9 @@ const App = () => {
               name="expirationDate"
               render={({ field: { onChange, onBlur, value } }) => (
                 <>
-                  <Text style={styles.label}>expiration date (mm/yy)</Text>
+                  <Text style={globalStyles.label}>
+                    expiration date (mm/yy)
+                  </Text>
                   <TextInput
                     onBlur={onBlur}
                     onChangeText={(text) => {
@@ -200,7 +202,7 @@ const App = () => {
                       onChange(formatted)
                     }}
                     value={value || expirationDate}
-                    style={styles.input}
+                    style={globalStyles.input}
                     keyboardType="number-pad"
                   />
                 </>
@@ -213,7 +215,7 @@ const App = () => {
             )}
           </View>
         </View>
-        <View style={styles.button}>
+        <View style={globalStyles.button}>
           <Button
             title="Save"
             onPress={handleSubmit(onSubmit)}

@@ -3,7 +3,7 @@ import { Button, Platform, Text, TextInput } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
-import { styles } from '@/constants/styles'
+import { customDatePickerStyles } from './customDatePickerStyles'
 
 const CustomDatePicker = ({
   onChange,
@@ -29,7 +29,7 @@ const CustomDatePicker = ({
   if (Platform.OS === 'web') {
     return (
       <>
-        <Text style={styles.label}>Date of birth</Text>
+        <Text style={customDatePickerStyles.label}>Date of birth</Text>
         <DatePicker
           showMonthDropdown
           showYearDropdown
@@ -38,7 +38,7 @@ const CustomDatePicker = ({
           dateFormat="dd/MM/yyyy"
           dropdownMode="select"
           calendarStartDay={1}
-          customInput={<TextInput style={styles.input} />}
+          customInput={<TextInput style={customDatePickerStyles.input} />}
         />
       </>
     )

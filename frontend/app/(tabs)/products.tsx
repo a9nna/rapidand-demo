@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { View, ScrollView } from 'react-native'
 import useProductApi from '@/hooks/useProductApi'
-import { styles } from '@/constants/styles'
-import ProductCard from '@/components/ProductCard'
+import { globalStyles } from '@/constants/globalStyles'
+import ProductCard from '@/components/ProductCard/ProductCard'
 import { ProductForm } from '@/constants/types'
 
 const App = () => {
@@ -23,7 +23,7 @@ const App = () => {
 
   return (
     <ScrollView>
-      <View style={styles.cardsContainer}>
+      <View style={globalStyles.cardsContainer}>
         {products.map((product, position) => (
           <ProductCard
             image={product.image}

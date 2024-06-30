@@ -1,10 +1,10 @@
-import { styles } from '@/constants/styles'
-import { Control, Controller } from 'react-hook-form'
+import { globalStyles } from '@/constants/globalStyles'
+import { Control, Controller, FieldValues } from 'react-hook-form'
 import { View, TextInput, Text } from 'react-native'
 
-interface FormInputProps {
+interface FormInputProps<T extends FieldValues> {
   name: string
-  control: Control
+  control: Control<T>
   label?: string
   secureTextEntry?: boolean
   keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad'
@@ -22,7 +22,7 @@ const CustomInput: React.FC<FormInputProps> = ({
 }) => {
   return (
     <View>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <Text style={globalStyles.label}>{label}</Text>}
       <Controller
         control={control}
         render={({ field: { onChange, onBlur, value } }) => (
@@ -31,7 +31,7 @@ const CustomInput: React.FC<FormInputProps> = ({
             onChangeText={onChange}
             value={value}
             keyboardType={keyboardType}
-            style={styles.input}
+            style={globalStyles.input}
           />
         )}
         name={name}

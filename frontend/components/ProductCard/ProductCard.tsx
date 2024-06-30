@@ -1,6 +1,7 @@
-import { styles } from '@/constants/styles'
+import { globalStyles } from '@/constants/globalStyles'
 import { ProductForm } from '@/constants/types'
 import { Image, Text, View } from 'react-native'
+import { productCardStyles } from '@/components/ProductCard/productCardStyles'
 
 const ProductCard = ({ image, name, type }: ProductForm) => {
   console.log(
@@ -8,14 +9,14 @@ const ProductCard = ({ image, name, type }: ProductForm) => {
     `/Users/anapaulacoronel/Documents/Developer/Proyectos/rapidand-products-form/rapidand-demo/backend/src/uploads`,
   )
   return (
-    <View style={styles.card}>
+    <View style={productCardStyles.card}>
       <Image
         source={{
           uri: require(`../../backend`),
         }}
-        style={styles.previewImage}
+        style={globalStyles.previewImage}
       />
-      <Text style={styles.label}>{name}</Text>
+      <Text style={globalStyles.label}>{name}</Text>
       <Text>{type}</Text>
     </View>
   )

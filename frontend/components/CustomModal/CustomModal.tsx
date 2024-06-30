@@ -1,5 +1,5 @@
-import { styles } from '@/constants/styles'
 import { Button, Modal, Text, View } from 'react-native'
+import { customModalStyles } from '@/components/CustomModal/customModalStyles'
 
 interface CustomModalProps {
   data: string[]
@@ -19,8 +19,8 @@ const CustomModal = ({ data, isVisible, onClose }: CustomModalProps) => {
       animationType="fade"
       onRequestClose={closeModal}
     >
-      <View style={styles.modalBackground}>
-        <View style={styles.modalContainer}>
+      <View style={customModalStyles.modalBackground}>
+        <View style={customModalStyles.modalContainer}>
           <Text
             style={{
               fontSize: 18,
