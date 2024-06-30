@@ -1,22 +1,20 @@
-import { globalStyles } from '@/constants/globalStyles'
 import { ProductForm } from '@/constants/types'
 import { Image, Text, View } from 'react-native'
-import { productCardStyles } from '@/components/ProductCard/productCardStyles'
+import { productCardStyles } from './productCardStyles'
 
 const ProductCard = ({ image, name, type }: ProductForm) => {
-  console.log(
-    'base',
-    `/Users/anapaulacoronel/Documents/Developer/Proyectos/rapidand-products-form/rapidand-demo/backend/src/uploads`,
-  )
   return (
     <View style={productCardStyles.card}>
       <Image
         source={{
-          uri: require(`../../backend`),
+          uri: `${image}`,
         }}
-        style={globalStyles.previewImage}
+        style={productCardStyles.image}
+        resizeMode="cover"
       />
-      <Text style={globalStyles.label}>{name}</Text>
+      <Text style={productCardStyles.name} numberOfLines={1}>
+        {name}
+      </Text>
       <Text>{type}</Text>
     </View>
   )

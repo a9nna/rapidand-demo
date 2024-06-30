@@ -16,7 +16,19 @@ const useClientApi = () => {
     }
   }
 
-  return { createClient }
+  const getClient = async (): Promise<ClientForm[] | null> => {
+    try {
+      const response = await axios.get(
+        `${process.env.EXPO_PUBLIC_API_CLIENT_URL}`,
+      )
+      return response.data.clients
+    } catch (error) {
+      console.error('error api', error)
+      return null
+    }
+  }
+
+  return { createClient, getClient }
 }
 
 export default useClientApi

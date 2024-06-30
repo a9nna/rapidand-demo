@@ -1,13 +1,12 @@
 import { globalStyles } from '@/constants/globalStyles'
-import { Control, Controller, FieldValues } from 'react-hook-form'
+import { Control, Controller } from 'react-hook-form'
 import { View, TextInput, Text } from 'react-native'
 
-interface FormInputProps<T extends FieldValues> {
+interface FormInputProps {
   name: string
-  control: Control<T>
+  control: Control
   label?: string
   secureTextEntry?: boolean
-  keyboardType?: 'default' | 'email-address' | 'numeric' | 'phone-pad'
   isError: boolean
   errorMessage: string
 }
@@ -16,7 +15,6 @@ const CustomInput: React.FC<FormInputProps> = ({
   name,
   control,
   label,
-  keyboardType = 'default',
   isError,
   errorMessage,
 }) => {
@@ -30,7 +28,6 @@ const CustomInput: React.FC<FormInputProps> = ({
             onBlur={onBlur}
             onChangeText={onChange}
             value={value}
-            keyboardType={keyboardType}
             style={globalStyles.input}
           />
         )}

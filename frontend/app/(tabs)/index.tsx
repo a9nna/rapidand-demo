@@ -1,23 +1,23 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Text, TextInput, Button } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { Picker } from '@react-native-picker/picker'
 import { ClientForm } from '@/constants/types'
 import { yupResolver } from '@hookform/resolvers/yup'
-import clientValidationSchema from '@/utils/clientValidationSchema'
+import clientValidationSchema from '@/utils/schemas/clientValidationSchema'
 import CustomInput from '@/components/CustomInput'
 import CustomDatePicker from '@/components/CustomDatePicket/CustomDatePicker'
 import CustomModal from '@/components/CustomModal/CustomModal'
-import formattedFormData from '@/utils/formattedFormData'
 import useClientApi from '@/hooks/useClientApi'
 import { globalStyles } from '@/constants/globalStyles'
+import useCitiesApi from '@/hooks/useCitiesApi'
 
 const App = () => {
   const {
     control,
     handleSubmit,
     formState: { errors },
-    getValues,
+    reset,
   } = useForm({
     resolver: yupResolver(clientValidationSchema),
     defaultValues: {
@@ -36,17 +36,22 @@ const App = () => {
   })
 
   const { createClient } = useClientApi()
+  const { getCities } = useCitiesApi()
   const [expirationDate, setExpirationDate] = useState('')
   const [isModalVisible, setModalVisible] = useState(false)
-  const [modalData, setModalData] = useState<string[]>([])
-  const [towns, setTowns] = useState<string[]>([
-    'Kingston',
-    'Spanish Town',
-    'Portmore',
-    'Montego Bay',
-    'Mandeville',
-    'May Pen',
-  ])
+  const [modalData, setModalData] = useState<string>('')
+  const [cities, setCities] = useState<string[]>([])
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const data = await getCities('Andorra')
+      if (!data) return
+
+      setCities(data)
+    }
+
+    fetchProducts()
+  }, [])
 
   const formatExpirationDate = (value: string) => {
     const cleaned = value.replace(/\D/g, '')
@@ -62,10 +67,9 @@ const App = () => {
 
   const onSubmit = async (data: ClientForm) => {
     await createClient(data).then((res) => {
-      const formattedData = formattedFormData(data)
-
-      setModalData(formattedData)
+      setModalData('Client created successfully')
       setModalVisible(true)
+      reset()
     })
   }
 
@@ -116,8 +120,8 @@ const App = () => {
                     itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
-                    {towns.map((town) => (
-                      <Picker.Item key={town} label={town} value={town} />
+                    {cities.map((city, position) => (
+                      <Picker.Item key={position} label={city} value={city} />
                     ))}
                   </Picker>
                 </>
@@ -169,8 +173,8 @@ const App = () => {
                     itemStyle={{ height: 45, backgroundColor: 'red' }}
                   >
                     <Picker.Item value="" />
-                    {towns.map((town) => (
-                      <Picker.Item key={town} label={town} value={town} />
+                    {cities.map((city, position) => (
+                      <Picker.Item key={position} label={city} value={city} />
                     ))}
                   </Picker>
                 </>
@@ -203,7 +207,6 @@ const App = () => {
                     }}
                     value={value || expirationDate}
                     style={globalStyles.input}
-                    keyboardType="number-pad"
                   />
                 </>
               )}

@@ -8,7 +8,6 @@ import productValidationSchema from '@/utils/schemas/productValidationSchema'
 import CustomInput from '@/components/CustomInput'
 import { ProductForm } from '@/constants/types'
 import CustomModal from '@/components/CustomModal/CustomModal'
-import formattedFormData from '@/utils/formattedFormData'
 import useProductApi from '@/hooks/useProductApi'
 import { globalStyles } from '@/constants/globalStyles'
 
@@ -18,6 +17,7 @@ const NewProduct = () => {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm({
     resolver: yupResolver(productValidationSchema),
     defaultValues: {
@@ -29,8 +29,8 @@ const NewProduct = () => {
 
   const { createProduct } = useProductApi()
   const [isModalVisible, setModalVisible] = useState(false)
-  const [selectedImage, setSelectedImage] = useState<File | null>(null)
-  const [modalData, setModalData] = useState<string[]>([])
+  const [selectedImageUri, setSelectedImageUri] = useState<string>('')
+  const [modalData, setModalData] = useState<string>('')
   const [towns, setTowns] = useState<string[]>([
     'Kingston',
     'Spanish Town',
@@ -57,15 +57,36 @@ const NewProduct = () => {
     })
 
     if (!pickerResult.canceled) {
-      const image = pickerResult as unknown as File
-      setSelectedImage(image)
-      setValue('image', image)
+      setSelectedImageUri(pickerResult.assets[0].uri)
+
+      const base64 = pickerResult.assets[0].base64
+      const mimeType = pickerResult.assets[0].mimeType
+      const fileName = pickerResult.assets[0].fileName
+
+      if (base64 && fileName && mimeType) {
+        const base64ToBlob = (base64: string) => {
+          const binary = atob(base64.replace(/\s/g, ''))
+          const length = binary.length
+          const buffer = new ArrayBuffer(length)
+          const view = new Uint8Array(buffer)
+          for (let i = 0; i < length; i++) {
+            view[i] = binary.charCodeAt(i)
+          }
+          return new File([view], fileName, {
+            type: mimeType,
+            lastModified: Date.now(),
+          })
+        }
+
+        const imageBlob = base64ToBlob(base64)
+        setValue('image', imageBlob)
+      }
     }
   }
 
   const handleImageDelete = () => {
-    setSelectedImage(null)
-    setValue('image', '')
+    setSelectedImageUri('')
+    setValue('image', undefined as unknown as File)
   }
 
   const onSubmit: SubmitHandler<ProductForm> = async (data) => {
@@ -80,10 +101,11 @@ const NewProduct = () => {
     }
 
     await createProduct(formData).then(() => {
-      const formattedData = formattedFormData(data)
-
-      setModalData(formattedData)
+      setModalData('Product created successfully')
       setModalVisible(true)
+
+      setSelectedImageUri('')
+      reset()
     })
   }
 
@@ -101,17 +123,17 @@ const NewProduct = () => {
       <View style={globalStyles.formContainer}>
         <View style={globalStyles.form}>
           <View style={globalStyles.column}>
-            <CustomInput<T extends FieldValues>
+            <CustomInput
               control={control}
               name="name"
               label="product name"
               isError={!!errors.name}
               errorMessage={errors.name?.message!}
             />
-            {selectedImage ? (
+            {selectedImageUri ? (
               <View style={globalStyles.previewImageContainer}>
                 <Image
-                  source={{ uri: selectedImage }}
+                  source={{ uri: selectedImageUri }}
                   style={globalStyles.previewImage}
                   resizeMode="cover"
                 />

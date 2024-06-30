@@ -1,23 +1,27 @@
 const formattedFormData = (data: any) => {
   const camelCaseToNormal = (name: string) => {
-    const words = name.split(/(?=[A-Z])/);
+    const words = name.split(/(?=[A-Z])/)
 
     return words
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
-  };
-
-  const isDate = (value: any): value is Date => {
-    return value instanceof Date && !isNaN(value.getTime());
-  };
+      .join(' ')
+  }
 
   const formattedData = Object.entries(data).map(([key, value]) => {
-    const normalKey = camelCaseToNormal(key);
-    const formattedValue = isDate(value) ? value.toLocaleDateString() : value;
-    return `${normalKey}: ${formattedValue}`;
-  });
+    function isValidDate(value: string): boolean {
+      const date = new Date(value)
+      return !isNaN(date.getTime())
+    }
 
-  return formattedData;
-};
+    const normalKey = camelCaseToNormal(key)
+    const formattedValue = isValidDate(value as string)
+      ? new Date(value as string).toLocaleDateString()
+      : (value as string)
 
-export default formattedFormData;
+    return { key: normalKey, value: formattedValue }
+  })
+
+  return formattedData
+}
+
+export default formattedFormData

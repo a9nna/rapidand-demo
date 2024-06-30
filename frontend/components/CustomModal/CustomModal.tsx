@@ -2,7 +2,7 @@ import { Button, Modal, Text, View } from 'react-native'
 import { customModalStyles } from '@/components/CustomModal/customModalStyles'
 
 interface CustomModalProps {
-  data: string[]
+  data: string
   isVisible: boolean
   onClose?: () => void
 }
@@ -21,18 +21,7 @@ const CustomModal = ({ data, isVisible, onClose }: CustomModalProps) => {
     >
       <View style={customModalStyles.modalBackground}>
         <View style={customModalStyles.modalContainer}>
-          <Text
-            style={{
-              fontSize: 18,
-              fontWeight: 'bold',
-              marginBottom: 10,
-            }}
-          >
-            Form Data
-          </Text>
-          {data.map((item, position) => (
-            <Text key={position}>{item}</Text>
-          ))}
+          <Text>{data}</Text>
           <Button title="Close" onPress={closeModal} />
         </View>
       </View>

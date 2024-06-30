@@ -42,3 +42,16 @@ export const createClient = async (
     next(error);
   }
 };
+
+export const getClients = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const clients = await prisma.client.findMany();
+    res.status(200).json({ clients });
+  } catch (error) {
+    next(error);
+  }
+};
