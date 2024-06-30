@@ -1,8 +1,9 @@
 import { useState } from 'react'
-import { Button, Platform, StyleSheet, Text, TextInput } from 'react-native'
+import { Button, Platform, Text, TextInput } from 'react-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import { styles } from '@/constants/styles'
 
 const CustomDatePicker = ({
   onChange,
@@ -58,22 +59,5 @@ const CustomDatePicker = ({
     )
   }
 }
-
-const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    height: 45,
-  },
-  label: {
-    textTransform: 'uppercase',
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 5,
-  },
-})
 
 export default CustomDatePicker

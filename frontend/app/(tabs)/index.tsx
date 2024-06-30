@@ -1,15 +1,16 @@
 import { useState } from 'react'
-import { View, Text, TextInput, StyleSheet, Button } from 'react-native'
+import { View, Text, TextInput, Button } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { Picker } from '@react-native-picker/picker'
-import { ClientForm } from '@/utils/types'
+import { ClientForm } from '@/constants/types'
 import { yupResolver } from '@hookform/resolvers/yup'
 import clientValidationSchema from '@/utils/clientValidationSchema'
 import CustomInput from '@/components/CustomInput'
 import CustomDatePicker from '@/components/CustomDatePicker'
 import CustomModal from '@/components/CustomModal'
 import formattedFormData from '@/utils/formattedFormData'
-import useClient from '@/hooks/useClient'
+import useClientApi from '@/hooks/useClientApi'
+import { styles } from '@/constants/styles'
 
 const App = () => {
   const {
@@ -34,7 +35,7 @@ const App = () => {
     },
   })
 
-  const { createClient } = useClient()
+  const { createClient } = useClientApi()
   const [expirationDate, setExpirationDate] = useState('')
   const [isModalVisible, setModalVisible] = useState(false)
   const [modalData, setModalData] = useState<string[]>([])
@@ -60,12 +61,12 @@ const App = () => {
   }
 
   const onSubmit = async (data: ClientForm) => {
-    const formattedData = formattedFormData(data)
+    await createClient(data).then((res) => {
+      const formattedData = formattedFormData(data)
 
-    setModalData(formattedData)
-    setModalVisible(true)
-    console.log(data)
-    await createClient(data)
+      setModalData(formattedData)
+      setModalVisible(true)
+    })
   }
 
   return (
@@ -75,7 +76,7 @@ const App = () => {
         isVisible={isModalVisible}
         onClose={closeModal}
       />
-      <View style={styles.container}>
+      <View style={styles.formContainer}>
         <View style={styles.form}>
           <View style={styles.column}>
             <CustomInput
@@ -223,48 +224,5 @@ const App = () => {
     </View>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    margin: 20,
-    padding: 20,
-    borderRadius: 10,
-    backgroundColor: '#fff',
-  },
-  form: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 20,
-  },
-  column: {
-    flex: 1,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    height: 45,
-  },
-  label: {
-    textTransform: 'uppercase',
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 5,
-  },
-  button: {
-    backgroundColor: 'green',
-    color: 'white',
-    padding: 10,
-    borderRadius: 5,
-    marginTop: 20,
-    width: '20%',
-  },
-})
 
 export default App

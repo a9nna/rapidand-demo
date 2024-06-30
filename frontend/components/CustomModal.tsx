@@ -1,4 +1,5 @@
-import { Button, Modal, StyleSheet, Text, View } from 'react-native'
+import { styles } from '@/constants/styles'
+import { Button, Modal, Text, View } from 'react-native'
 
 interface CustomModalProps {
   data: string[]
@@ -38,22 +39,5 @@ const CustomModal = ({ data, isVisible, onClose }: CustomModalProps) => {
     </Modal>
   )
 }
-
-const styles = StyleSheet.create({
-  modalBackground: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  },
-  modalContainer: {
-    width: '80%',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-    gap: 20,
-  },
-})
 
 export default CustomModal

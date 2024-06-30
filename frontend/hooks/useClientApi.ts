@@ -1,18 +1,22 @@
-import axios from "axios";
-import { ClientForm } from "@/types";
+import axios from 'axios'
+import { ClientForm } from '@/constants/types'
 
 const useClientApi = () => {
   const createClient = async (clientData: ClientForm) => {
     try {
-      const response = await axios.post(`${process.env.API_URL}`, clientData);
+      const response = await axios.post(
+        `${process.env.EXPO_PUBLIC_API_CLIENT_URL}`,
+        clientData,
+      )
 
-      return response.data;
+      return response.data
     } catch (error) {
-      throw error;
+      console.error('error api', error)
+      return error
     }
-  };
+  }
 
-  return { createClient };
-};
+  return { createClient }
+}
 
-export default useClientApi;
+export default useClientApi

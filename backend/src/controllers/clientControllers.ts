@@ -21,8 +21,6 @@ export const createClient = async (
       town,
     } = req.body;
 
-    console.log(req.body);
-
     const newClient = await prisma.client.create({
       data: {
         name,

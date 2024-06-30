@@ -1,54 +1,54 @@
-import { Tabs } from 'expo-router';
-import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { Tabs } from 'expo-router'
+import { TabBarIcon } from '@/components/navigation/TabBarIcon'
+import { Colors } from '@/constants/Colors'
+import { useColorScheme } from '@/hooks/useColorScheme'
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
+  const colorScheme = useColorScheme()
 
   return (
     <Tabs
       screenOptions={{
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        headerShown: false
+        headerShown: false,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: 'Create Client',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? 'home' : 'home-outline'}
+              name={focused ? 'person' : 'person-outline'}
               color={color}
             />
-          )
+          ),
         }}
       />
       <Tabs.Screen
-        name="products"
+        name="new-product"
         options={{
-          title: 'Products',
+          title: 'Create Products',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
               name={focused ? 'pricetag' : 'pricetag-outline'}
               color={color}
             />
-          )
+          ),
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="products"
         options={{
-          title: 'Explore',
+          title: 'View Products',
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon
-              name={focused ? 'code-slash' : 'code-slash-outline'}
+              name={focused ? 'list' : 'list-outline'}
               color={color}
             />
-          )
+          ),
         }}
       />
     </Tabs>
-  );
+  )
 }

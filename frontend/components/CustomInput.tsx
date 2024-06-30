@@ -1,5 +1,6 @@
+import { styles } from '@/constants/styles'
 import { Control, Controller } from 'react-hook-form'
-import { StyleSheet, View, TextInput, Text } from 'react-native'
+import { View, TextInput, Text } from 'react-native'
 
 interface FormInputProps {
   name: string
@@ -40,21 +41,4 @@ const CustomInput: React.FC<FormInputProps> = ({
   )
 }
 
-const styles = StyleSheet.create({
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    borderRadius: 5,
-    padding: 10,
-    marginBottom: 10,
-    height: 45,
-  },
-  label: {
-    textTransform: 'uppercase',
-    fontSize: 16,
-    fontWeight: '700',
-    marginBottom: 5,
-    color: '#333',
-  },
-})
 export default CustomInput
